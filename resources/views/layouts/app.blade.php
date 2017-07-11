@@ -46,6 +46,15 @@
                             <li><a href="{{ route('login') }}">Login</a></li>
                             <li><a href="{{ route('register') }}">Register</a></li>
                         @else
+                            <li>
+                                <a><button type="button" autocomplete="off"
+                                           class="btn btn-sm"
+                                           v-bind:class="{ 'btn-primary': cache, 'btn-warning': !cache  }"
+                                           v-bind:class="{ active: cache }"
+                                           @click="cache = !cache"
+                                    >CACHE</button>
+                                </a>
+                            </li>
                             <li><a href="{{ route('settings') }}">Configuraciones</a></li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -77,5 +86,6 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
+    @yield('javascripts')
 </body>
 </html>

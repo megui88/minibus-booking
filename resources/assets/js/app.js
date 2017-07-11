@@ -17,10 +17,12 @@ window.Vue = require('vue');
 Vue.component('example', require('./components/Example.vue'));
 
 const formatDay = 'YYYY-MM-DD';
+let init;
 const app = new Vue({
     el: '#app',
     delimiters: ['{!', '!}'],
     data: {
+        cache: true,
         today: moment(),
         day: moment(),
         dayCalendar: null,
@@ -53,9 +55,12 @@ const app = new Vue({
         vehicles: [],
         chauffeurs: [],
         routes: [],
-        types_trip: []
+        types_trips: []
     },
     watch: {
+        cache: (value) => {
+            app.saveInStorage("cacheIsEnabled", value);
+        },
         formErrors: (errors) => {
             if (JSON.stringify(errors) === '{}') {
                 $('.has-error').removeClass('has-error');
@@ -67,32 +72,85 @@ const app = new Vue({
         }
     },
     methods: {
+        cacheIsEnabled: () => {
+            return app.getFromStorage("cacheIsEnabled");
+        },
+        saveInStorage: (key, value) => {
+            localStorage.setItem(key, JSON.stringify(value));
+            return this;
+        },
+        inStorage: (key) => {
+            return localStorage.hasOwnProperty(key);
+        },
+        getFromStorage: (key) => {
+            return JSON.parse(localStorage.getItem(key));
+        },
         init: () => {
+            clearTimeout(init);
+            init = setTimeout(app._init(), 1000);
+        },
+        _init: () => {
+            let cache = app.getFromStorage('cacheIsEnabled') || false;
+            app.cache = cache;
             app.loadEntities();
             app.services = [];
             app.dayCalendar = app.day.calendar().toString();
             let qday = app.day.clone();
-            axios.get('/bookings?day=' + qday.format('YYYY-MM-DD')).then((resp) => {
+            let uri = app.getUri(qday);
+
+            if (cache && app.inStorage(uri)) {
+                if (!qday.isSame(app.day)) {
+                    return;
+                }
+                app.services = app.getFromStorage(uri);
+                app.clearService();
+                return;
+            }
+            axios.get(uri).then((resp) => {
                 if (!qday.isSame(app.day)) {
                     return;
                 }
                 app.services = resp.data;
+                app.saveInStorage(uri, app.services);
                 app.clearService();
             });
+        },
+        getUri: (day) => {
+            return '/bookings?day=' + day.format('YYYY-MM-DD');
+        },
+        addToServices: (service) => {
+            app.services.push(service);
+            app.saveInStorage(app.getUri(app.day), app.services);
+        },
+        updateService: (index, service) => {
+            app.services[index] = service;
+            app.saveInStorage(app.getUri(app.day), app.services);
         },
         loadEntities: () => {
 
             let requests = [];
-            let entities = ['agencies', 'vehicles', 'chauffeurs', 'routes', 'types_trip'];
+            let entities = ['agencies', 'vehicles', 'chauffeurs', 'routes', 'types_trips'];
             entities.forEach((e) => {
+
+                if (app.cache && app.inStorage(e)) {
+                    app[e] = app.getFromStorage(e) || [];
+                    return;
+                }
+
                 requests.push(
                     axios.get('/' + e)
                 );
             });
+
+            if (0 === requests.length) {
+                return;
+            }
+
             axios.all(requests)
                 .then((data) => {
                     entities.forEach((e, i) => {
                         app[e] = data[i].data;
+                        app.saveInStorage(e, data[i].data);
                     });
                 })
                 .catch((error) => {
@@ -117,7 +175,7 @@ const app = new Vue({
         settingCreate: (entity) => {
             axios.post(entity, app.model.setting)
                 .then((res) => {
-                    app[entity].push(res.data);
+                    app.addSetting(entity, res.data);
                     $('#formSetting').modal('hide');
                     app.clearSetting();
                 })
@@ -132,13 +190,21 @@ const app = new Vue({
                     let index = app[entity].findIndex((e) => {
                         return e.id == app.model.setting.id;
                     });
-                    app[entity][index] = object;
+                    app.updateSetting(entity, index, object);
                     $('#formSetting').modal('hide');
                     app.clearSetting();
                 })
                 .catch((errors) => {
                     app.formErrors = errors.response.data;
                 });
+        },
+        addSetting: (entity, value) => {
+            app[entity].push(value);
+            app.saveInStorage(entity, app[entity]);
+        },
+        updateSetting: (entity, index, object) => {
+            app[entity][index] = object;
+            app.saveInStorage(entity, app[entity]);
         },
         clearService: () => {
             app.model.service = {
@@ -185,7 +251,7 @@ const app = new Vue({
                     let index = app.services.findIndex((e) => {
                         return e.id == service.id;
                     });
-                    app.services[index] = service;
+                    app.updateService(index, service);
                     app.clearService();
                     $('#formService').modal('hide');
                 })
@@ -201,7 +267,7 @@ const app = new Vue({
             axios.all(requests)
                 .then((data) => {
                     data.forEach((resp) => {
-                        app.services.push(resp.data);
+                        app.addToServices(resp.data);
                     });
                     $('#formService').modal('hide');
                 })
@@ -214,7 +280,8 @@ const app = new Vue({
             $('#formService').modal('show');
         },
         edit: (service) => {
-            app.model.service = JSON.parse(JSON.stringify(service));b
+            app.model.service = JSON.parse(JSON.stringify(service));
+            b
             $('#formService').modal('show');
         },
         routeName: (id) => {
@@ -230,7 +297,10 @@ const app = new Vue({
             return app.findName(id, 'chauffeurs');
         },
         findName: (id, type) => {
-            if (id == null) {
+            if (id === null) {
+                return '';
+            }
+            if (app[type] === undefined) {
                 return '';
             }
             return (app[type].find((c) => {
@@ -239,4 +309,3 @@ const app = new Vue({
         }
     }
 });
-app.init();

@@ -92,3 +92,8 @@
         @include('modal_form_service')
     </div>
 @endsection
+@section('javascripts')
+    <script type="application/javascript">
+        app.__vue__.init();
+    </script>
+@endsection

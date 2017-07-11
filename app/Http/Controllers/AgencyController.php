@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\BaseRequest;
+use App\Http\Requests\BaseSettingRequest;
 use App\Agency;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -35,7 +35,7 @@ class AgencyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(BaseRequest $request)
+    public function create(BaseSettingRequest $request)
     {
         $data = [];
         foreach (json_decode($request->getContent()) as $k => $v) {
@@ -50,7 +50,7 @@ class AgencyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(Agency $agency, BaseRequest $request)
+    public function update(Agency $agency, BaseSettingRequest $request)
     {
         $data = [];
         foreach (json_decode($request->getContent()) as $k => $v) {

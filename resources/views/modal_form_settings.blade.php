@@ -19,7 +19,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group form-group-sm" id="container_number_passengers" v-if="model.entity_type == 'types_trip'">
+                    <div class="form-group form-group-sm" id="container_number_passengers" v-if="model.entity_type == 'types_trips'">
                         <label class="col-sm-6 control-label" for="number_passengers">Numero de Pasajeros</label>
                         <div class="col-sm-6">
                             <input type="text" class="form-control" id="number_passengers"

@@ -40,6 +40,6 @@ Route::get('/chauffeurs', 'ChauffeurController@all')->name('chauffeurs');
 Route::post('/chauffeurs', 'ChauffeurController@create')->name('create_chauffeur');
 Route::put('/chauffeurs/{chauffeur}', 'ChauffeurController@update')->name('update_chauffeur');
 //Type Trip
-Route::get('/types_trip', 'TypeTripController@all')->name('types_trip');
-Route::post('/types_trip', 'TypeTripController@create')->name('create_type_trip');
-Route::put('/types_trip/{type_trip}', 'TypeTripController@update')->name('update_type_trip');
+Route::get('/types_trips', 'TypeTripController@all')->name('types_trips');
+Route::post('/types_trips', 'TypeTripController@create')->name('create_type_trip');
+Route::put('/types_trips/{type_trip}', 'TypeTripController@update')->name('update_type_trip');
