@@ -9,6 +9,9 @@
             </div>
             <div class="modal-body">
                 <div class="form-horizontal">
+                    <div class="alert alert-warning" role="alert" v-if="'' !== formServiceMessage">
+                        <strong>Atención!</strong> {!  formServiceMessage !}
+                    </div>
                     <input type="hidden" class="form-control" id="id" v-model="model.service.id">
 
                     <div class="form-group form-group-sm" v-if="model.service.id === null">
@@ -19,12 +22,11 @@
                                    v-model="model.number">
                         </div>
                     </div>
-                    <div class="form-group form-group-sm" id="container_date">
+                    <div class="form-group form-group-sm" v-if="model.service.id === null">
                         <label class="col-sm-6 control-label" for="date_services">Fecha del servicio</label>
                         <div class="col-sm-6">
                             <input type="date" class="form-control" id="date_services"
-                                   v-model="model.service.date"
-                                   placeholder="{{(new \Carbon\Carbon('now'))->format('Y-m-d') }}">
+                                   v-model="model.service.date" readonly="readonly">
                         </div>
                     </div>
                     <div class="form-group form-group-sm" id="container_agency_id">

@@ -27,6 +27,7 @@ const app = new Vue({
         day: moment(),
         dayCalendar: null,
         services: [],
+        formServiceMessage: '',
         formErrors: {},
         entities: false,
         model: {
@@ -276,12 +277,12 @@ const app = new Vue({
                 });
         },
         createService: () => {
+            app.formServiceMessage = app.today.isAfter(app.day)?'Este servicio ya paso (!?)':'';
             app.clearService();
             $('#formService').modal('show');
         },
         edit: (service) => {
             app.model.service = JSON.parse(JSON.stringify(service));
-            b
             $('#formService').modal('show');
         },
         routeName: (id) => {
