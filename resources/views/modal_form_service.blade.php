@@ -33,7 +33,7 @@
                         <label class="col-sm-6 control-label" for="agency">Agencia</label>
                         <div class="col-sm-6">
                             <select class="form-control" id="agency" v-model="model.service.agency_id">
-                                <option>Seleccionar uno</option>
+                                <option value="">Seleccionar uno</option>
                                 <option v-for="agency in agencies" v-bind:value='agency.id'>{! agency.name !}</option>
                             </select>
                         </div>
@@ -42,7 +42,7 @@
                         <label class="col-sm-6 control-label" for="turn">Turno</label>
                         <div class="col-sm-6">
                             <select class="form-control" id="turn" v-model="model.service.turn">
-                                <option>Seleccionar uno</option>
+                                <option value="">Seleccionar uno</option>
                                 <option>AM</option>
                                 <option>PM</option>
                             </select>
@@ -52,7 +52,7 @@
                         <label class="col-sm-6 control-label" for="route">Servicio</label>
                         <div class="col-sm-6">
                             <select class="form-control" id="route" v-model="model.service.route_id">
-                                <option>Seleccionar uno</option>
+                                <option value="">Seleccionar uno</option>
                                 <option v-for="route in routes" v-bind:value='route.id'>{! route.name !}</option>
                             </select>
                         </div>
@@ -62,7 +62,7 @@
                             <label class="col-sm-6 control-label" for="vehicle">Vehiculo</label>
                             <div class="col-sm-6">
                                 <select class="form-control" id="vehicle" v-model="model.service.vehicle_id">
-                                    <option>Seleccionar uno</option>
+                                    <option value="">Seleccionar uno</option>
                                     <option v-for="vehicle in vehicles" v-bind:value='vehicle.id'>{! vehicle.name !}</option>
                                 </select>
                             </div>
@@ -71,7 +71,7 @@
                             <label class="col-sm-6 control-label" for="chauffeur">Chofer</label>
                             <div class="col-sm-6">
                                 <select class="form-control" id="chauffeur" v-model="model.service.chauffeur_id">
-                                    <option>Seleccionar uno</option>
+                                    <option value="">Seleccionar uno</option>
                                     <option v-for="chauffeur in chauffeurs" v-bind:value='chauffeur.id'>{! chauffeur.name !}</option>
                                 </select>
                             </div>

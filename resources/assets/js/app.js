@@ -282,6 +282,7 @@ const app = new Vue({
             $('#formService').modal('show');
         },
         edit: (service) => {
+            app.formServiceMessage = moment(app.today.format('YYYY-MM-DD')).isAfter(moment(app.model.service.date).format('YYYY-MM-DD'))?'Estas editando una fecha pasada.':'';
             app.model.service = JSON.parse(JSON.stringify(service));
             $('#formService').modal('show');
         },

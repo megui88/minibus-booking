@@ -31,7 +31,7 @@
                         <label class="col-sm-6 control-label" for="chauffeur">Chofer</label>
                         <div class="col-sm-6">
                             <select class="form-control" id="chauffeur" v-model="model.setting.chauffeur_id">
-                                <option>Seleccionar uno</option>
+                                <option value="">Seleccionar uno</option>
                                 <option v-for="chauffeur in chauffeurs" v-bind:value='chauffeur.id'>{! chauffeur.name !}</option>
                             </select>
                         </div>
