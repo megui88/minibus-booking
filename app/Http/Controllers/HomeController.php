@@ -35,4 +35,14 @@ class HomeController extends Controller
     {
         return view('settings');
     }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function rules()
+    {
+        return view('rules');
+    }
 }

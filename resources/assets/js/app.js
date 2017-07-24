@@ -39,19 +39,33 @@ const app = new Vue({
                 date: null,
                 route_id: null,
                 vehicle_id: null,
+                type_trip_id: null,
                 chauffeur_id: null,
                 courier: null,
                 passengers: null,
                 hour: null,
+                paying: null,
+                enabled: true,
             },
             entity_type: '',
             setting: {
                 id: null,
                 name: '',
                 chauffeur_id: null,
-                number_passengers: null,
+                default_price: null,
+            },
+            rule: {
+                id: null,
+                agency_id: 'ANY',
+                turn: 'ANY',
+                route_id: 'ANY',
+                type_trip_id: 'ANY',
+                number_passengers: 0,
+                priority: 0,
+                price: null,
             }
         },
+        rules: [],
         agencies: [],
         vehicles: [],
         chauffeurs: [],
@@ -130,7 +144,7 @@ const app = new Vue({
         loadEntities: () => {
 
             let requests = [];
-            let entities = ['agencies', 'vehicles', 'chauffeurs', 'routes', 'types_trips'];
+            let entities = ['agencies', 'vehicles', 'chauffeurs', 'routes', 'types_trips', 'rules'];
             entities.forEach((e) => {
 
                 if (app.cache && app.inStorage(e)) {
@@ -156,6 +170,58 @@ const app = new Vue({
                 })
                 .catch((error) => {
                     console.log(error);
+                });
+        },
+        clearRule: () => {
+            app.model.rule = {
+                id: null,
+                agency_id: 'ANY',
+                turn: 'ANY',
+                route_id: 'ANY',
+                type_trip_id: 'ANY',
+                number_passengers: 0,
+                priority: 0,
+                price: null
+            }
+        },
+        formRule: (object) => {
+            app.clearRule();
+            let data = object || app.model.rule;
+            app.model.rule = JSON.parse(JSON.stringify(data));
+            $('#formRule').modal('show');
+
+        },
+        doneFormRule: () => {
+            if (app.model.rule.id === null) {
+                return app.ruleCreate();
+            }
+
+            return app.ruleUpdate();
+        },
+        ruleCreate: () => {
+            axios.post('rules', app.model.rule)
+                .then((res) => {
+                    app.addSetting('rules', res.data);
+                    $('#formRule').modal('hide');
+                    app.clearRule();
+                })
+                .catch((errors) => {
+                    app.formErrors = errors.response.data;
+                });
+        },
+        ruleUpdate: () => {
+            axios.put('rules/' + app.model.rule.id, app.model.rule)
+                .then((res) => {
+                    let object = res.data;
+                    let index = app['rules'].findIndex((e) => {
+                        return e.id == app.model.rule.id;
+                    });
+                    app.updateSetting('rules', index, object);
+                    $('#formRule').modal('hide');
+                    app.clearRule();
+                })
+                .catch((errors) => {
+                    app.formErrors = errors.response.data;
                 });
         },
         formSetting: (entity, object) => {
@@ -215,10 +281,13 @@ const app = new Vue({
                 date: app.day.clone().format('YYYY-MM-DD'),
                 route_id: null,
                 vehicle_id: null,
+                type_trip_id: null,
                 chauffeur_id: null,
                 courier: null,
                 passengers: null,
                 hour: '00:00',
+                paying: null,
+                enabled: true,
             }
         },
         clearSetting: () => {
@@ -226,7 +295,7 @@ const app = new Vue({
                 id: null,
                 name: '',
                 chauffeur_id: null,
-                number_passengers: null,
+                default_price: null,
             }
         },
         goToday: () => {
@@ -277,14 +346,37 @@ const app = new Vue({
                 });
         },
         createService: () => {
-            app.formServiceMessage = app.today.isAfter(app.day)?'Este servicio ya paso (!?)':'';
+            app.formServiceMessage = app.today.isAfter(app.day) ? 'Este servicio ya paso (!?)' : '';
             app.clearService();
             $('#formService').modal('show');
         },
         edit: (service) => {
-            app.formServiceMessage = moment(app.today.format('YYYY-MM-DD')).isAfter(moment(app.model.service.date).format('YYYY-MM-DD'))?'Estas editando una fecha pasada.':'';
+            app.formServiceMessage = moment(app.today.format('YYYY-MM-DD')).isAfter(moment(app.model.service.date).format('YYYY-MM-DD')) ? 'Estas editando una fecha pasada.' : '';
             app.model.service = JSON.parse(JSON.stringify(service));
             $('#formService').modal('show');
+        },
+        disable: (id) => {
+            let disableConfirm = confirm("Este registro no podra ser liquidado a la agencia \n\r esta seguro?");
+            if (false == disableConfirm) {
+                return;
+            }
+            let service = app.services.find((s) => {
+                return s.id === id;
+            });
+            service.enabled = false;
+            axios.put('/bookings/' + service.id, service)
+                .then(function (res) {
+                    let service = res.data;
+                    let index = app.services.findIndex((e) => {
+                        return e.id == service.id;
+                    });
+                    app.updateService(index, service);
+                })
+                .catch((errors) => {
+                    alert('Intente mas tarde \r\n' + errors.message);
+                });
+
+
         },
         routeName: (id) => {
             return app.findName(id, 'routes');
@@ -298,6 +390,9 @@ const app = new Vue({
         chauffeurName: (id) => {
             return app.findName(id, 'chauffeurs');
         },
+        typeTripName: (id) => {
+            return app.findName(id, 'types_trips');
+        },
         findName: (id, type) => {
             if (id === null) {
                 return '';
@@ -305,9 +400,11 @@ const app = new Vue({
             if (app[type] === undefined) {
                 return '';
             }
-            return (app[type].find((c) => {
-                return c.id === id;
-            })).name;
+            let entity = (app[type].find((c) => {
+                return c.id == id;
+            }));
+
+            return (entity !== undefined) ? entity.name : id;
         }
     }
 });

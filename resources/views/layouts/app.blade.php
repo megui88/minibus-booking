@@ -37,6 +37,7 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
                         <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                        <li><a href="{{ route('prices') }}">Reglas de Agencias</a></li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->

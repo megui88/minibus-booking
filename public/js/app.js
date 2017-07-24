@@ -16579,19 +16579,33 @@ var app = new Vue({
                 date: null,
                 route_id: null,
                 vehicle_id: null,
+                type_trip_id: null,
                 chauffeur_id: null,
                 courier: null,
                 passengers: null,
-                hour: null
+                hour: null,
+                paying: null,
+                enabled: true
             },
             entity_type: '',
             setting: {
                 id: null,
                 name: '',
                 chauffeur_id: null,
-                number_passengers: null
+                default_price: null
+            },
+            rule: {
+                id: null,
+                agency_id: 'ANY',
+                turn: 'ANY',
+                route_id: 'ANY',
+                type_trip_id: 'ANY',
+                number_passengers: 0,
+                priority: 0,
+                price: null
             }
         },
+        rules: [],
         agencies: [],
         vehicles: [],
         chauffeurs: [],
@@ -16670,7 +16684,7 @@ var app = new Vue({
         loadEntities: function loadEntities() {
 
             var requests = [];
-            var entities = ['agencies', 'vehicles', 'chauffeurs', 'routes', 'types_trips'];
+            var entities = ['agencies', 'vehicles', 'chauffeurs', 'routes', 'types_trips', 'rules'];
             entities.forEach(function (e) {
 
                 if (app.cache && app.inStorage(e)) {
@@ -16692,6 +16706,53 @@ var app = new Vue({
                 });
             }).catch(function (error) {
                 console.log(error);
+            });
+        },
+        clearRule: function clearRule() {
+            app.model.rule = {
+                id: null,
+                agency_id: 'ANY',
+                turn: 'ANY',
+                route_id: 'ANY',
+                type_trip_id: 'ANY',
+                number_passengers: 0,
+                priority: 0,
+                price: null
+            };
+        },
+        formRule: function formRule(object) {
+            app.clearRule();
+            var data = object || app.model.rule;
+            app.model.rule = JSON.parse(JSON.stringify(data));
+            $('#formRule').modal('show');
+        },
+        doneFormRule: function doneFormRule() {
+            if (app.model.rule.id === null) {
+                return app.ruleCreate();
+            }
+
+            return app.ruleUpdate();
+        },
+        ruleCreate: function ruleCreate() {
+            axios.post('rules', app.model.rule).then(function (res) {
+                app.addSetting('rules', res.data);
+                $('#formRule').modal('hide');
+                app.clearRule();
+            }).catch(function (errors) {
+                app.formErrors = errors.response.data;
+            });
+        },
+        ruleUpdate: function ruleUpdate() {
+            axios.put('rules/' + app.model.rule.id, app.model.rule).then(function (res) {
+                var object = res.data;
+                var index = app['rules'].findIndex(function (e) {
+                    return e.id == app.model.rule.id;
+                });
+                app.updateSetting('rules', index, object);
+                $('#formRule').modal('hide');
+                app.clearRule();
+            }).catch(function (errors) {
+                app.formErrors = errors.response.data;
             });
         },
         formSetting: function formSetting(entity, object) {
@@ -16746,10 +16807,13 @@ var app = new Vue({
                 date: app.day.clone().format('YYYY-MM-DD'),
                 route_id: null,
                 vehicle_id: null,
+                type_trip_id: null,
                 chauffeur_id: null,
                 courier: null,
                 passengers: null,
-                hour: '00:00'
+                hour: '00:00',
+                paying: null,
+                enabled: true
             };
         },
         clearSetting: function clearSetting() {
@@ -16757,7 +16821,7 @@ var app = new Vue({
                 id: null,
                 name: '',
                 chauffeur_id: null,
-                number_passengers: null
+                default_price: null
             };
         },
         goToday: function goToday() {
@@ -16813,6 +16877,25 @@ var app = new Vue({
             app.model.service = JSON.parse(JSON.stringify(service));
             $('#formService').modal('show');
         },
+        disable: function disable(id) {
+            var disableConfirm = confirm("Este registro no podra ser liquidado a la agencia \n\r esta seguro?");
+            if (false == disableConfirm) {
+                return;
+            }
+            var service = app.services.find(function (s) {
+                return s.id === id;
+            });
+            service.enabled = false;
+            axios.put('/bookings/' + service.id, service).then(function (res) {
+                var service = res.data;
+                var index = app.services.findIndex(function (e) {
+                    return e.id == service.id;
+                });
+                app.updateService(index, service);
+            }).catch(function (errors) {
+                alert('Intente mas tarde \r\n' + errors.message);
+            });
+        },
         routeName: function routeName(id) {
             return app.findName(id, 'routes');
         },
@@ -16825,6 +16908,9 @@ var app = new Vue({
         chauffeurName: function chauffeurName(id) {
             return app.findName(id, 'chauffeurs');
         },
+        typeTripName: function typeTripName(id) {
+            return app.findName(id, 'types_trips');
+        },
         findName: function findName(id, type) {
             if (id === null) {
                 return '';
@@ -16832,9 +16918,11 @@ var app = new Vue({
             if (app[type] === undefined) {
                 return '';
             }
-            return app[type].find(function (c) {
-                return c.id === id;
-            }).name;
+            var entity = app[type].find(function (c) {
+                return c.id == id;
+            });
+
+            return entity !== undefined ? entity.name : id;
         }
     }
 });

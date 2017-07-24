@@ -19,10 +19,15 @@ Auth::routes();
 
 Route::get('/dashboard', 'HomeController@index')->name('dashboard');
 Route::get('/settings', 'HomeController@settings')->name('settings');
+Route::get('/prices', 'HomeController@rules')->name('prices');
 //Booking
 Route::get('/bookings', 'BookingController@all')->name('bookings');
 Route::post('/bookings', 'BookingController@create')->name('create_booking');
 Route::put('/bookings/{service}', 'BookingController@update')->name('update_booking');
+//Rules
+Route::get('/rules', 'RuleController@all')->name('rules');
+Route::post('/rules', 'RuleController@create')->name('create_rule');
+Route::put('/rules/{rule}', 'RuleController@update')->name('update_rule');
 //Routes
 Route::get('/routes', 'RouteController@all')->name('routes');
 Route::post('/routes', 'RouteController@create')->name('create_route');

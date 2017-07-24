@@ -12,6 +12,7 @@ class Agency extends Model
      * @var array
      */
     protected $fillable = [
-        'name'
+        'name',
+        'default_price'
     ];
 }

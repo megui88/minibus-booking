@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Service extends Model
+class Rule extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -12,19 +12,12 @@ class Service extends Model
      * @var array
      */
     protected $fillable = [
-        'turn',
-        'hour',
-        'route_id',
-        'type_id',
-        'date',
-        'vehicle_id',
-        'chauffeur_id',
-        'courier',
         'agency_id',
-        'passengers',
+        'turn',
+        'route_id',
         'type_trip_id',
-        'paying',
-        'enabled'
+        'number_passengers',
+        'priority',
+        'price',
     ];
-
 }

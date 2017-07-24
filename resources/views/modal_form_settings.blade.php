@@ -19,11 +19,11 @@
                         </div>
                     </div>
 
-                    <div class="form-group form-group-sm" id="container_number_passengers" v-if="model.entity_type == 'types_trips'">
-                        <label class="col-sm-6 control-label" for="number_passengers">Numero de Pasajeros</label>
+                    <div class="form-group form-group-sm" id="container_default_price" v-if="model.entity_type == 'agencies'">
+                        <label class="col-sm-6 control-label" for="default_price">Precio por defecto</label>
                         <div class="col-sm-6">
-                            <input type="text" class="form-control" id="number_passengers"
-                                   v-model="model.setting.number_passengers"/>
+                            <input type="number" class="form-control" id="default_price"
+                                   v-model="model.setting.default_price"/>
                         </div>
                     </div>
 

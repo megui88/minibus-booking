@@ -23,7 +23,7 @@
                                             <th><a @click="formSetting('chauffeurs')">Agregar</a></th>
                                         </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody class="text-left">
                                         <tr v-for="chauffeur in chauffeurs">
                                             <th>{! chauffeur.id !}</th>
                                             <td>{! chauffeur.name !}</td>
@@ -44,7 +44,7 @@
                                             <th><a @click="formSetting('agencies')">Agregar</a></th>
                                         </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody class="text-left">
                                         <tr v-for="agency in agencies">
                                             <th>{! agency.id !}</th>
                                             <td>{! agency.name !}</td>
@@ -68,7 +68,7 @@
                                                 <th><a @click="formSetting('vehicles')">Agregar</a></th>
                                             </tr>
                                             </thead>
-                                            <tbody>
+                                            <tbody class="text-left">
                                             <tr v-for="vehicle in vehicles">
                                                 <th>{! vehicle.id !}</th>
                                                 <td>{! vehicle.name !}</td>
@@ -91,11 +91,10 @@
                                                 <th><a @click="formSetting('types_trips')">Agregar</a></th>
                                             </tr>
                                             </thead>
-                                            <tbody>
+                                            <tbody class="text-left">
                                             <tr v-for="type in types_trips">
                                                 <th>{! type.id !}</th>
                                                 <td>{! type.name !}</td>
-                                                <td>{! type.number_passengers !}</td>
                                                 <td><a @click="formSetting('types_trips', type)" class="btn"><span
                                                                 class="glyphicon glyphicon-pencil"></span></a></td>
                                             </tr>
@@ -112,7 +111,7 @@
                                                 <th><a @click="formSetting('routes')">Agregar</a></th>
                                             </tr>
                                             </thead>
-                                            <tbody>
+                                            <tbody class="text-left">
                                             <tr v-for="route in routes">
                                                 <th>{! route.id !}</th>
                                                 <td>{! route.name !}</td>

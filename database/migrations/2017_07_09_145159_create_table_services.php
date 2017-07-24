@@ -23,9 +23,11 @@ class CreateTableServices extends Migration
             $table->integer('type_id')->nullable();
             $table->integer('vehicle_id')->nullable();
             $table->integer('chauffeur_id')->nullable();
+            $table->integer('type_trip_id')->nullable();
             $table->string('courier')->nullable();
             $table->integer('passengers')->nullable();
             $table->decimal('paying')->nullable();
+            $table->boolean('enabled')->default(true);
             $table->timestamps();
         });
     }

@@ -13,6 +13,6 @@ class TypeTrip extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'number_passengers'
+        'name'
     ];
 }

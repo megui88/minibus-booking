@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableTypesTrip extends Migration
+class CreateTableRules extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,15 @@ class CreateTableTypesTrip extends Migration
      */
     public function up()
     {
-        Schema::create('types_trips', function (Blueprint $table) {
+        Schema::create('rules', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
+            $table->string('turn');
+            $table->string('route_id');
+            $table->string('agency_id');
+            $table->string('type_trip_id');
+            $table->integer('number_passengers');
+            $table->decimal('price');
+            $table->integer('priority');
             $table->timestamps();
         });
     }
@@ -27,6 +33,6 @@ class CreateTableTypesTrip extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('types_trips');
+        Schema::dropIfExists('rules');
     }
 }

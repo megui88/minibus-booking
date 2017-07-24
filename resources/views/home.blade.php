@@ -68,11 +68,13 @@
                                     <th>Chofer</th>
                                     <th>Guía</th>
                                     <th>Pasajeros</th>
+                                    <th>Tipo de viaje</th>
+                                    <th>Remover</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr v-for="item in services" @click="edit(item)">
-                                    <th scope="row">{! item.id !}</th>
+                                <tr v-for="item in services" v-bind:class="{'danger': false == item.enabled, 'success': item.paying !== null}">
+                                    <th scope="row"><a v-if="item.enabled"  @click="edit(item)">{! item.id !}</a></th>
                                     <td>{! routeName(item.route_id) !}</td>
                                     <td>{! agencyName(item.agency_id) !}</td>
                                     <td>{! item.turn !}</td>
@@ -81,6 +83,12 @@
                                     <td>{! chauffeurName(item.chauffeur_id) !}</td>
                                     <td>{! item.courier !}</td>
                                     <td>{! item.passengers !}</td>
+                                    <td>{! typeTripName(item.type_trip_id) !}</td>
+                                    <td>
+                                        <a v-if="item.enabled && item.paying == null" @click="disable(item.id)">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </a>
+                                    </td>
                                 </tr>
                                 </tbody>
                             </table>
