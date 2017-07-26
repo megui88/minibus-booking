@@ -34,7 +34,11 @@
                                     <td>{! liquidation.services.length !}</td>
                                     <td>{! liquidation.total !}</td>
                                     <td><a @click="deleteLiquidation(liquidation)" class="btn"><span
-                                                    class="glyphicon glyphicon-remove"></span></a></td>
+                                                    class="glyphicon glyphicon-remove"></span></a>
+
+                                        <span>&nbsp;&nbsp;</span>
+                                        <a v-bind:href="'/download/liquidated/'+liquidation.id" class="btn"><span
+                                                    class="glyphicon glyphicon-download"></span></a></td>
                                 </tr>
                                 </tbody>
                             </table>
