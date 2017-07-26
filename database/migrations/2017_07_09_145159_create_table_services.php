@@ -20,7 +20,6 @@ class CreateTableServices extends Migration
             $table->integer('agency_id');
             $table->date('date');
             $table->string('hour')->nullable();
-            $table->integer('type_id')->nullable();
             $table->integer('vehicle_id')->nullable();
             $table->integer('chauffeur_id')->nullable();
             $table->integer('type_trip_id')->nullable();

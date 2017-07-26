@@ -60,7 +60,7 @@ class BookingController extends Controller
     {
         $data = [];
         foreach (json_decode($request->getContent()) as $k => $v) {
-            $data[$k] = ('null' == $v) ? null : $v;
+            $data[$k] = ('null' === $v) ? null : $v;
         };
         $service = Service::create($data);
         return new JsonResponse($service, JsonResponse::HTTP_CREATED);
@@ -75,7 +75,7 @@ class BookingController extends Controller
     {
         $data = [];
         foreach (json_decode($request->getContent()) as $k => $v) {
-            $data[$k] = ('null' == $v) ? null : $v;
+            $data[$k] = ('null' === $v) ? null : $v;
         };
         $service->update($data);
         return new JsonResponse($service, JsonResponse::HTTP_OK);

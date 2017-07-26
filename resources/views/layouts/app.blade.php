@@ -38,6 +38,7 @@
                     <ul class="nav navbar-nav">
                         <li><a href="{{ route('incompletes') }}">Servicios incompletos</a></li>
                         <li><a href="{{ route('prices') }}">Reglas de Agencias</a></li>
+                        <li><a href="{{ route('liquidated') }}">Liquidaciones</a></li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->

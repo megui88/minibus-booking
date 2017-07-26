@@ -55,4 +55,24 @@ class HomeController extends Controller
     {
         return view('incompletes');
     }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function liquidated()
+    {
+        return view('liquidated');
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function downloadLiquidated()
+    {
+        return view('liquidated');
+    }
 }

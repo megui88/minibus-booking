@@ -28,6 +28,7 @@ const app = new Vue({
         dayCalendar: null,
         services: [],
         formServiceMessage: '',
+        formLiquidationMessage: '',
         formErrors: {},
         entities: false,
         model: {
@@ -62,6 +63,11 @@ const app = new Vue({
                 number_passengers: 0,
                 priority: 0,
                 price: null,
+            },
+            liquidation: {
+                agency_id: null,
+                date_init: null,
+                date_end: null,
             }
         },
         rules: [],
@@ -71,6 +77,7 @@ const app = new Vue({
         routes: [],
         types_trips: [],
         incompletes: [],
+        liquidations: [],
     },
     watch: {
         cache: (value) => {
@@ -102,6 +109,13 @@ const app = new Vue({
                 hour: '00:00',
                 paying: null,
                 enabled: true,
+            }
+        },
+        clearLiquidation: () => {
+            app.model.liquidation = {
+                agency_id: null,
+                date_init: null,
+                date_end: null,
             }
         },
         clearSetting: () => {
@@ -166,9 +180,40 @@ const app = new Vue({
                 app.clearService();
             });
         },
+        loadLiquidations: () => {
+
+            let requests = [];
+            let entities = ['liquidations'];
+            entities.forEach((e) => {
+
+                if (app.cache && app.inStorage(e)) {
+                    app[e] = app.getFromStorage(e) || [];
+                    return;
+                }
+
+                requests.push(
+                    axios.get('/' + e)
+                );
+            });
+
+            if (0 === requests.length) {
+                return;
+            }
+
+            axios.all(requests)
+                .then((data) => {
+                    entities.forEach((e, i) => {
+                        app[e] = data[i].data;
+                        app.saveInStorage(e, data[i].data);
+                    });
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        },
         getIncompletes: () => {
             axios.get('/bookings?filterOr[type_trip_id]=null&filterOr[passengers]=null')
-                .then((res) =>{
+                .then((res) => {
                     app.incompletes = res.data;
                 });
         },
@@ -213,6 +258,39 @@ const app = new Vue({
                 .catch((error) => {
                     console.log(error);
                 });
+        },
+        formLiquidation: () => {
+            app.formLiquidationMessage = '';
+            app.clearLiquidation();
+            $('#formLiquidation').modal('show');
+
+        },
+        doneFormLiquidation: () => {
+            app.formLiquidationMessage = '';
+            axios.post('liquidations', app.model.liquidation)
+                .then((res) => {
+                    app.addSetting('liquidations', res.data);
+                    $('#formLiquidation').modal('hide');
+                    app.clearRule();
+                })
+                .catch((errors) => {
+                    app.formErrors = errors.response.data;
+                    app.formLiquidationMessage = errors.response.data.agency_id[0]
+                });
+        },
+        deleteLiquidation: (liquidation) => {
+
+            let disableConfirm = confirm("Este registro es inreproducible, y lo va a borrar \n\r esta seguro?");
+            if (false == disableConfirm) {
+                return;
+            }
+
+            axios.delete('liquidations/' + liquidation.id).then(() => {
+                let index = app.liquidations.findIndex((e) => {
+                    return e.id == liquidation.id;
+                });
+                app.removeSetting('liquidations', index);
+            });
         },
         formRule: (object) => {
             app.clearRule();
@@ -301,6 +379,10 @@ const app = new Vue({
         },
         updateSetting: (entity, index, object) => {
             app[entity][index] = object;
+            app.saveInStorage(entity, app[entity]);
+        },
+        removeSetting: (entity, index) => {
+            app[entity].splice(index,1);
             app.saveInStorage(entity, app[entity]);
         },
         goToday: () => {

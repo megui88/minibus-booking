@@ -1,16 +1,5 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
 Route::get('/', function () {
     return view('welcome');
 });
@@ -21,6 +10,7 @@ Route::get('/dashboard', 'HomeController@index')->name('dashboard');
 Route::get('/settings', 'HomeController@settings')->name('settings');
 Route::get('/prices', 'HomeController@rules')->name('prices');
 Route::get('/incompletes', 'HomeController@incompletes')->name('incompletes');
+Route::get('/liquidated', 'HomeController@liquidated')->name('liquidated');
 
 //Booking
 Route::get('/bookings', 'BookingController@all')->name('bookings');
@@ -50,3 +40,7 @@ Route::put('/chauffeurs/{chauffeur}', 'ChauffeurController@update')->name('updat
 Route::get('/types_trips', 'TypeTripController@all')->name('types_trips');
 Route::post('/types_trips', 'TypeTripController@create')->name('create_type_trip');
 Route::put('/types_trips/{type_trip}', 'TypeTripController@update')->name('update_type_trip');
+//Liquidations
+Route::get('/liquidations', 'LiquidationController@all')->name('liquidations');
+Route::post('/liquidations', 'LiquidationController@create')->name('create_liquidation');
+Route::delete('/liquidations/{liquidation}', 'LiquidationController@delete')->name('delete_liquidation');

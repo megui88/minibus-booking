@@ -16568,6 +16568,7 @@ var app = new Vue({
         dayCalendar: null,
         services: [],
         formServiceMessage: '',
+        formLiquidationMessage: '',
         formErrors: {},
         entities: false,
         model: {
@@ -16602,6 +16603,11 @@ var app = new Vue({
                 number_passengers: 0,
                 priority: 0,
                 price: null
+            },
+            liquidation: {
+                agency_id: null,
+                date_init: null,
+                date_end: null
             }
         },
         rules: [],
@@ -16610,7 +16616,8 @@ var app = new Vue({
         chauffeurs: [],
         routes: [],
         types_trips: [],
-        incompletes: []
+        incompletes: [],
+        liquidations: []
     },
     watch: {
         cache: function cache(value) {
@@ -16642,6 +16649,13 @@ var app = new Vue({
                 hour: '00:00',
                 paying: null,
                 enabled: true
+            };
+        },
+        clearLiquidation: function clearLiquidation() {
+            app.model.liquidation = {
+                agency_id: null,
+                date_init: null,
+                date_end: null
             };
         },
         clearSetting: function clearSetting() {
@@ -16706,6 +16720,33 @@ var app = new Vue({
                 app.clearService();
             });
         },
+        loadLiquidations: function loadLiquidations() {
+
+            var requests = [];
+            var entities = ['liquidations'];
+            entities.forEach(function (e) {
+
+                if (app.cache && app.inStorage(e)) {
+                    app[e] = app.getFromStorage(e) || [];
+                    return;
+                }
+
+                requests.push(axios.get('/' + e));
+            });
+
+            if (0 === requests.length) {
+                return;
+            }
+
+            axios.all(requests).then(function (data) {
+                entities.forEach(function (e, i) {
+                    app[e] = data[i].data;
+                    app.saveInStorage(e, data[i].data);
+                });
+            }).catch(function (error) {
+                console.log(error);
+            });
+        },
         getIncompletes: function getIncompletes() {
             axios.get('/bookings?filterOr[type_trip_id]=null&filterOr[passengers]=null').then(function (res) {
                 app.incompletes = res.data;
@@ -16747,6 +16788,36 @@ var app = new Vue({
                 });
             }).catch(function (error) {
                 console.log(error);
+            });
+        },
+        formLiquidation: function formLiquidation() {
+            app.formLiquidationMessage = '';
+            app.clearLiquidation();
+            $('#formLiquidation').modal('show');
+        },
+        doneFormLiquidation: function doneFormLiquidation() {
+            app.formLiquidationMessage = '';
+            axios.post('liquidations', app.model.liquidation).then(function (res) {
+                app.addSetting('liquidations', res.data);
+                $('#formLiquidation').modal('hide');
+                app.clearRule();
+            }).catch(function (errors) {
+                app.formErrors = errors.response.data;
+                app.formLiquidationMessage = errors.response.data.agency_id[0];
+            });
+        },
+        deleteLiquidation: function deleteLiquidation(liquidation) {
+
+            var disableConfirm = confirm("Este registro es inreproducible, y lo va a borrar \n\r esta seguro?");
+            if (false == disableConfirm) {
+                return;
+            }
+
+            axios.delete('liquidations/' + liquidation.id).then(function () {
+                var index = app.liquidations.findIndex(function (e) {
+                    return e.id == liquidation.id;
+                });
+                app.removeSetting('liquidations', index);
             });
         },
         formRule: function formRule(object) {
@@ -16826,6 +16897,10 @@ var app = new Vue({
         },
         updateSetting: function updateSetting(entity, index, object) {
             app[entity][index] = object;
+            app.saveInStorage(entity, app[entity]);
+        },
+        removeSetting: function removeSetting(entity, index) {
+            app[entity].splice(index, 1);
             app.saveInStorage(entity, app[entity]);
         },
         goToday: function goToday() {

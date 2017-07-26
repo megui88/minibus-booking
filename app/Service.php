@@ -15,7 +15,6 @@ class Service extends Model
         'turn',
         'hour',
         'route_id',
-        'type_id',
         'date',
         'vehicle_id',
         'chauffeur_id',
@@ -26,5 +25,25 @@ class Service extends Model
         'paying',
         'enabled'
     ];
+
+
+    protected static function boot()
+    {
+        parent::boot();
+       self::updating(function ($entity) {
+            $complete = false;
+            foreach (['turn','route_id','agency_id', 'passengers', 'type_trip_id'] as $column){
+                if(empty($entity->$column)){
+                    break;
+                }
+                $complete = true;
+            }
+            if($complete){
+                $rule = Rule::searchRule($entity);
+                $entity->paying = $rule->price;
+            }
+        });
+
+    }
 
 }
