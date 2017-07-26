@@ -16753,7 +16753,7 @@ var app = new Vue({
             });
         },
         getUri: function getUri(day) {
-            return '/bookings?date=' + day.format('YYYY-MM-DD');
+            return '/bookings?filter[date]=' + day.format('YYYY-MM-DD');
         },
         addToServices: function addToServices(service) {
             app.services.push(service);

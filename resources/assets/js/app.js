@@ -218,7 +218,7 @@ const app = new Vue({
                 });
         },
         getUri: (day) => {
-            return '/bookings?date=' + day.format('YYYY-MM-DD');
+            return '/bookings?filter[date]=' + day.format('YYYY-MM-DD');
         },
         addToServices: (service) => {
             app.services.push(service);
