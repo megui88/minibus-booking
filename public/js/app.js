@@ -16591,8 +16591,7 @@ var app = new Vue({
             setting: {
                 id: null,
                 name: '',
-                chauffeur_id: null,
-                default_price: null
+                chauffeur_id: null
             },
             rule: {
                 id: null,
@@ -16627,6 +16626,42 @@ var app = new Vue({
         }
     },
     methods: {
+        clearService: function clearService() {
+            app.model.service = {
+                id: null,
+                agency_id: null,
+                turn: null,
+                date: app.day.clone().format('YYYY-MM-DD'),
+                route_id: null,
+                vehicle_id: null,
+                type_trip_id: null,
+                chauffeur_id: null,
+                courier: null,
+                passengers: null,
+                hour: '00:00',
+                paying: null,
+                enabled: true
+            };
+        },
+        clearSetting: function clearSetting() {
+            app.model.setting = {
+                id: null,
+                name: '',
+                chauffeur_id: null
+            };
+        },
+        clearRule: function clearRule() {
+            app.model.rule = {
+                id: null,
+                agency_id: 'ANY',
+                turn: 'ANY',
+                route_id: 'ANY',
+                type_trip_id: 'ANY',
+                number_passengers: 0,
+                priority: 0,
+                price: null
+            };
+        },
         cacheIsEnabled: function cacheIsEnabled() {
             return app.getFromStorage("cacheIsEnabled");
         },
@@ -16708,18 +16743,6 @@ var app = new Vue({
                 console.log(error);
             });
         },
-        clearRule: function clearRule() {
-            app.model.rule = {
-                id: null,
-                agency_id: 'ANY',
-                turn: 'ANY',
-                route_id: 'ANY',
-                type_trip_id: 'ANY',
-                number_passengers: 0,
-                priority: 0,
-                price: null
-            };
-        },
         formRule: function formRule(object) {
             app.clearRule();
             var data = object || app.model.rule;
@@ -16798,31 +16821,6 @@ var app = new Vue({
         updateSetting: function updateSetting(entity, index, object) {
             app[entity][index] = object;
             app.saveInStorage(entity, app[entity]);
-        },
-        clearService: function clearService() {
-            app.model.service = {
-                id: null,
-                agency_id: null,
-                turn: null,
-                date: app.day.clone().format('YYYY-MM-DD'),
-                route_id: null,
-                vehicle_id: null,
-                type_trip_id: null,
-                chauffeur_id: null,
-                courier: null,
-                passengers: null,
-                hour: '00:00',
-                paying: null,
-                enabled: true
-            };
-        },
-        clearSetting: function clearSetting() {
-            app.model.setting = {
-                id: null,
-                name: '',
-                chauffeur_id: null,
-                default_price: null
-            };
         },
         goToday: function goToday() {
             app.day = moment();

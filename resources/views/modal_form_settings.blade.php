@@ -18,21 +18,15 @@
                                    v-model="model.setting.name"/>
                         </div>
                     </div>
-
-                    <div class="form-group form-group-sm" id="container_default_price" v-if="model.entity_type == 'agencies'">
-                        <label class="col-sm-6 control-label" for="default_price">Precio por defecto</label>
-                        <div class="col-sm-6">
-                            <input type="number" class="form-control" id="default_price"
-                                   v-model="model.setting.default_price"/>
-                        </div>
-                    </div>
-
-                    <div class="form-group form-group-sm" id="container_chauffeur" v-if="model.entity_type == 'vehicles'">
+                    <div class="form-group form-group-sm" id="container_chauffeur"
+                         v-if="model.entity_type == 'vehicles'">
                         <label class="col-sm-6 control-label" for="chauffeur">Chofer</label>
                         <div class="col-sm-6">
                             <select class="form-control" id="chauffeur" v-model="model.setting.chauffeur_id">
                                 <option value="">Seleccionar uno</option>
-                                <option v-for="chauffeur in chauffeurs" v-bind:value='chauffeur.id'>{! chauffeur.name !}</option>
+                                <option v-for="chauffeur in chauffeurs" v-bind:value='chauffeur.id'>{! chauffeur.name
+                                    !}
+                                </option>
                             </select>
                         </div>
                     </div>

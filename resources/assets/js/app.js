@@ -52,7 +52,6 @@ const app = new Vue({
                 id: null,
                 name: '',
                 chauffeur_id: null,
-                default_price: null,
             },
             rule: {
                 id: null,
@@ -87,6 +86,42 @@ const app = new Vue({
         }
     },
     methods: {
+        clearService: () => {
+            app.model.service = {
+                id: null,
+                agency_id: null,
+                turn: null,
+                date: app.day.clone().format('YYYY-MM-DD'),
+                route_id: null,
+                vehicle_id: null,
+                type_trip_id: null,
+                chauffeur_id: null,
+                courier: null,
+                passengers: null,
+                hour: '00:00',
+                paying: null,
+                enabled: true,
+            }
+        },
+        clearSetting: () => {
+            app.model.setting = {
+                id: null,
+                name: '',
+                chauffeur_id: null,
+            }
+        },
+        clearRule: () => {
+            app.model.rule = {
+                id: null,
+                agency_id: 'ANY',
+                turn: 'ANY',
+                route_id: 'ANY',
+                type_trip_id: 'ANY',
+                number_passengers: 0,
+                priority: 0,
+                price: null
+            }
+        },
         cacheIsEnabled: () => {
             return app.getFromStorage("cacheIsEnabled");
         },
@@ -171,18 +206,6 @@ const app = new Vue({
                 .catch((error) => {
                     console.log(error);
                 });
-        },
-        clearRule: () => {
-            app.model.rule = {
-                id: null,
-                agency_id: 'ANY',
-                turn: 'ANY',
-                route_id: 'ANY',
-                type_trip_id: 'ANY',
-                number_passengers: 0,
-                priority: 0,
-                price: null
-            }
         },
         formRule: (object) => {
             app.clearRule();
@@ -272,31 +295,6 @@ const app = new Vue({
         updateSetting: (entity, index, object) => {
             app[entity][index] = object;
             app.saveInStorage(entity, app[entity]);
-        },
-        clearService: () => {
-            app.model.service = {
-                id: null,
-                agency_id: null,
-                turn: null,
-                date: app.day.clone().format('YYYY-MM-DD'),
-                route_id: null,
-                vehicle_id: null,
-                type_trip_id: null,
-                chauffeur_id: null,
-                courier: null,
-                passengers: null,
-                hour: '00:00',
-                paying: null,
-                enabled: true,
-            }
-        },
-        clearSetting: () => {
-            app.model.setting = {
-                id: null,
-                name: '',
-                chauffeur_id: null,
-                default_price: null,
-            }
         },
         goToday: () => {
             app.day = moment();

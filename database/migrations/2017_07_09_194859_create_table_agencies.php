@@ -16,7 +16,6 @@ class CreateTableAgencies extends Migration
         Schema::create('agencies', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->decimal('default_price');
             $table->timestamps();
         });
     }

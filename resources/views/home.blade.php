@@ -69,7 +69,7 @@
                                     <th>Guía</th>
                                     <th>Pasajeros</th>
                                     <th>Tipo de viaje</th>
-                                    <th>Remover</th>
+                                    <th>Acciones</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -82,9 +82,13 @@
                                     <td>{! vehicleName(item.vehicle_id) !}</td>
                                     <td>{! chauffeurName(item.chauffeur_id) !}</td>
                                     <td>{! item.courier !}</td>
-                                    <td>{! item.passengers !}</td>
-                                    <td>{! typeTripName(item.type_trip_id) !}</td>
+                                    <td v-bind:class="{'warning': item.passengers < 1 }">{! item.passengers !}</td>
+                                    <td v-bind:class="{'warning': item.type_trip_id == null }">{! typeTripName(item.type_trip_id) !}</td>
                                     <td>
+                                        <a v-if="item.enabled && item.paying == null" @click="edit(item)">
+                                            <span class="glyphicon glyphicon-edit"></span>
+                                        </a>
+                                        <span>&nbsp;&nbsp;</span>
                                         <a v-if="item.enabled && item.paying == null" @click="disable(item.id)">
                                             <span class="glyphicon glyphicon-remove"></span>
                                         </a>
