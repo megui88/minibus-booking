@@ -33,18 +33,22 @@ class BookingController extends Controller
         $filters = $request->get('filter', []);
         foreach ($filters as $column => $value) {
             $value = ('false' == $value) ? false
-                : ('true' == $value) ? true
-                    : ('null' == $value) ? null
-                        : $value;
+                : ('true' == $value) ? true : $value;
+            if ($value == 'null') {
+                $services->whereNull($column);
+                continue;
+            }
             $services->where($column, '=', $value);
         }
 
         $filters = $request->get('filterOr', []);
         foreach ($filters as $column => $value) {
             $value = ('false' == $value) ? false
-                : ('true' == $value) ? true
-                    : ('null' == $value) ? null
-                        : $value;
+                : ('true' == $value) ? true : $value;
+            if ($value == 'null') {
+                $services->orWhereNull($column);
+                continue;
+            }
             $services->whereOr($column, '=', $value);
         }
 
