@@ -7,6 +7,7 @@ use App\Service;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use DB;
 
 class BookingController extends Controller
 {
@@ -27,9 +28,27 @@ class BookingController extends Controller
      */
     public function all(Request $request)
     {
-        $day = $request->get('day', (new Carbon('now'))->format('Y-m-d'));
-        $services = Service::where('date', '=', $day)->get();
-        return new JsonResponse($services, JsonResponse::HTTP_OK);
+        $services = DB::table('services');
+
+        $filters = $request->get('filter', []);
+        foreach ($filters as $column => $value) {
+            $value = ('false' == $value) ? false
+                : ('true' == $value) ? true
+                    : ('null' == $value) ? null
+                        : $value;
+            $services->where($column, '=', $value);
+        }
+
+        $filters = $request->get('filterOr', []);
+        foreach ($filters as $column => $value) {
+            $value = ('false' == $value) ? false
+                : ('true' == $value) ? true
+                    : ('null' == $value) ? null
+                        : $value;
+            $services->whereOr($column, '=', $value);
+        }
+
+        return new JsonResponse($services->get(), JsonResponse::HTTP_OK);
     }
 
     /**
@@ -41,7 +60,7 @@ class BookingController extends Controller
     {
         $data = [];
         foreach (json_decode($request->getContent()) as $k => $v) {
-            $data[$k] = $v;
+            $data[$k] = ('null' == $v) ? null : $v;
         };
         $service = Service::create($data);
         return new JsonResponse($service, JsonResponse::HTTP_CREATED);
@@ -56,7 +75,7 @@ class BookingController extends Controller
     {
         $data = [];
         foreach (json_decode($request->getContent()) as $k => $v) {
-            $data[$k] = $v;
+            $data[$k] = ('null' == $v) ? null : $v;
         };
         $service->update($data);
         return new JsonResponse($service, JsonResponse::HTTP_OK);

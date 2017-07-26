@@ -28,15 +28,15 @@
                     </button>
 
                     <!-- Branding Image -->
-                    <a class="navbar-brand" href="{{ url('/') }}">
-                        {{ config('app.name', 'Laravel') }}
+                    <a class="navbar-brand" href="{{ route('dashboard') }}">
+                        {{ config('app.name', 'Dashboard') }}
                     </a>
                 </div>
 
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                        <li><a href="{{ route('incompletes') }}">Servicios incompletos</a></li>
                         <li><a href="{{ route('prices') }}">Reglas de Agencias</a></li>
                     </ul>
 

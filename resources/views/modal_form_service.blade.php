@@ -10,7 +10,7 @@
             <div class="modal-body">
                 <div class="form-horizontal">
                     <div class="alert alert-warning" role="alert" v-if="'' !== formServiceMessage">
-                        <strong>Atención!</strong> {!  formServiceMessage !}
+                        <strong>Atención!</strong> {! formServiceMessage !}
                     </div>
                     <input type="hidden" class="form-control" id="id" v-model="model.service.id">
 
@@ -33,7 +33,7 @@
                         <label class="col-sm-6 control-label" for="agency">Agencia</label>
                         <div class="col-sm-6">
                             <select class="form-control" id="agency" v-model="model.service.agency_id">
-                                <option value="">Seleccionar uno</option>
+                                <option value=null>Seleccionar uno</option>
                                 <option v-for="agency in agencies" v-bind:value='agency.id'>{! agency.name !}</option>
                             </select>
                         </div>
@@ -42,7 +42,7 @@
                         <label class="col-sm-6 control-label" for="turn">Turno</label>
                         <div class="col-sm-6">
                             <select class="form-control" id="turn" v-model="model.service.turn">
-                                <option value="">Seleccionar uno</option>
+                                <option value=null>Seleccionar uno</option>
                                 <option>AM</option>
                                 <option>PM</option>
                             </select>
@@ -52,18 +52,21 @@
                         <label class="col-sm-6 control-label" for="route">Servicio</label>
                         <div class="col-sm-6">
                             <select class="form-control" id="route" v-model="model.service.route_id">
-                                <option value="">Seleccionar uno</option>
+                                <option value=null>Seleccionar uno</option>
                                 <option v-for="route in routes" v-bind:value='route.id'>{! route.name !}</option>
                             </select>
                         </div>
                     </div>
-                    <div class="form-group form-group-sm" id="container_type_trip_id">
+                    <div class="form-group form-group-sm" id="container_type_trip_id"
+                         v-bind:class="{'has-error': model.service.type_trip_id == null && model.service.id !== null}">
                         <label class="col-sm-6 control-label" for="type_trip">Tipo de viaje</label>
                         <div class="col-sm-6">
 
                             <select class="form-control" id="type_trip" v-model="model.service.type_trip_id">
-                                <option value="">Seleccionar uno</option>
-                                <option v-for="type_trip in types_trips" v-bind:value='type_trip.id'>{! type_trip.name !}</option>
+                                <option value=null>Seleccionar uno</option>
+                                <option v-for="type_trip in types_trips" v-bind:value='type_trip.id'>{! type_trip.name
+                                    !}
+                                </option>
                             </select>
                         </div>
                     </div>
@@ -72,8 +75,9 @@
                             <label class="col-sm-6 control-label" for="vehicle">Vehiculo</label>
                             <div class="col-sm-6">
                                 <select class="form-control" id="vehicle" v-model="model.service.vehicle_id">
-                                    <option value="">Seleccionar uno</option>
-                                    <option v-for="vehicle in vehicles" v-bind:value='vehicle.id'>{! vehicle.name !}</option>
+                                    <option value=null>Seleccionar uno</option>
+                                    <option v-for="vehicle in vehicles" v-bind:value='vehicle.id'>{! vehicle.name !}
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -81,8 +85,10 @@
                             <label class="col-sm-6 control-label" for="chauffeur">Chofer</label>
                             <div class="col-sm-6">
                                 <select class="form-control" id="chauffeur" v-model="model.service.chauffeur_id">
-                                    <option value="">Seleccionar uno</option>
-                                    <option v-for="chauffeur in chauffeurs" v-bind:value='chauffeur.id'>{! chauffeur.name !}</option>
+                                    <option value=null>Seleccionar uno</option>
+                                    <option v-for="chauffeur in chauffeurs" v-bind:value='chauffeur.id'>{!
+                                        chauffeur.name !}
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -93,19 +99,12 @@
                                        v-model="model.service.courier"/>
                             </div>
                         </div>
-                        <div class="form-group form-group-sm" id="container_passengers">
+                        <div class="form-group form-group-sm" id="container_passengers"
+                             v-bind:class="{'has-error': model.service.passengers == null}">
                             <label class="col-sm-6 control-label" for="passengers">Pasajeros</label>
                             <div class="col-sm-6">
                                 <input type="number" class="form-control" id="passengers"
                                        v-model="model.service.passengers"/>
-                            </div>
-                        </div>
-
-                        <div class="form-group form-group-sm" id="container_default_price">
-                            <label class="col-sm-6 control-label" for="default_price">Precio por defecto</label>
-                            <div class="col-sm-6">
-                                <input type="number" class="form-control" id="default_price"
-                                       v-model="model.setting.default_price"/>
                             </div>
                         </div>
                     </div>

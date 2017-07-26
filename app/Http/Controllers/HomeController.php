@@ -45,4 +45,14 @@ class HomeController extends Controller
     {
         return view('rules');
     }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function incompletes()
+    {
+        return view('incompletes');
+    }
 }

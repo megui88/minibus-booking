@@ -16609,7 +16609,8 @@ var app = new Vue({
         vehicles: [],
         chauffeurs: [],
         routes: [],
-        types_trips: []
+        types_trips: [],
+        incompletes: []
     },
     watch: {
         cache: function cache(value) {
@@ -16696,17 +16697,22 @@ var app = new Vue({
                 app.clearService();
                 return;
             }
-            axios.get(uri).then(function (resp) {
+            axios.get(uri).then(function (res) {
                 if (!qday.isSame(app.day)) {
                     return;
                 }
-                app.services = resp.data;
+                app.services = res.data;
                 app.saveInStorage(uri, app.services);
                 app.clearService();
             });
         },
+        getIncompletes: function getIncompletes() {
+            axios.get('/bookings?filterOr[type_trip_id]=null&filterOr[passengers]=null').then(function (res) {
+                app.incompletes = res.data;
+            });
+        },
         getUri: function getUri(day) {
-            return '/bookings?day=' + day.format('YYYY-MM-DD');
+            return '/bookings?date=' + day.format('YYYY-MM-DD');
         },
         addToServices: function addToServices(service) {
             app.services.push(service);
@@ -16921,6 +16927,9 @@ var app = new Vue({
             });
 
             return entity !== undefined ? entity.name : id;
+        },
+        _moment: function _moment(data) {
+            return moment(data);
         }
     }
 });

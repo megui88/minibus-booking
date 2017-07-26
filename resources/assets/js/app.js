@@ -69,7 +69,8 @@ const app = new Vue({
         vehicles: [],
         chauffeurs: [],
         routes: [],
-        types_trips: []
+        types_trips: [],
+        incompletes: [],
     },
     watch: {
         cache: (value) => {
@@ -156,17 +157,23 @@ const app = new Vue({
                 app.clearService();
                 return;
             }
-            axios.get(uri).then((resp) => {
+            axios.get(uri).then((res) => {
                 if (!qday.isSame(app.day)) {
                     return;
                 }
-                app.services = resp.data;
+                app.services = res.data;
                 app.saveInStorage(uri, app.services);
                 app.clearService();
             });
         },
+        getIncompletes: () => {
+            axios.get('/bookings?filterOr[type_trip_id]=null&filterOr[passengers]=null')
+                .then((res) =>{
+                    app.incompletes = res.data;
+                });
+        },
         getUri: (day) => {
-            return '/bookings?day=' + day.format('YYYY-MM-DD');
+            return '/bookings?date=' + day.format('YYYY-MM-DD');
         },
         addToServices: (service) => {
             app.services.push(service);
@@ -403,6 +410,7 @@ const app = new Vue({
             }));
 
             return (entity !== undefined) ? entity.name : id;
-        }
+        },
+        _moment: data => moment(data)
     }
 });

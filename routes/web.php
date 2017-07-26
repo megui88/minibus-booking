@@ -20,6 +20,8 @@ Auth::routes();
 Route::get('/dashboard', 'HomeController@index')->name('dashboard');
 Route::get('/settings', 'HomeController@settings')->name('settings');
 Route::get('/prices', 'HomeController@rules')->name('prices');
+Route::get('/incompletes', 'HomeController@incompletes')->name('incompletes');
+
 //Booking
 Route::get('/bookings', 'BookingController@all')->name('bookings');
 Route::post('/bookings', 'BookingController@create')->name('create_booking');
