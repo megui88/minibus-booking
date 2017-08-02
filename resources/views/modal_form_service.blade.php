@@ -45,6 +45,7 @@
                                 <option value=null>Seleccionar uno</option>
                                 <option>AM</option>
                                 <option>PM</option>
+                                <option>NOCHE</option>
                             </select>
                         </div>
                     </div>

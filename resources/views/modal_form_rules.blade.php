@@ -27,6 +27,7 @@
                                 <option value="ANY">Cualquiera</option>
                                 <option>AM</option>
                                 <option>PM</option>
+                                <option>NOCHE</option>
                             </select>
                         </div>
                     </div>
