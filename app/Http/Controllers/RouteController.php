@@ -59,4 +59,15 @@ class RouteController extends Controller
         $route->update($data);
         return new JsonResponse($route, JsonResponse::HTTP_OK);
     }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function delete(Route $route)
+    {
+        Route::destroy($route->id);
+        return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
+    }
 }

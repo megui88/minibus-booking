@@ -59,4 +59,15 @@ class AgencyController extends Controller
         $agency->update($data);
         return new JsonResponse($agency, JsonResponse::HTTP_OK);
     }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function delete(Agency $agency)
+    {
+        Agency::destroy($agency->id);
+        return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
+    }
 }

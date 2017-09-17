@@ -7,7 +7,14 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="center-block">
-                            Dashboard <a @click="goToday()">ir a Hoy</a><br>
+
+                            <div class='input-group date' id='datetimepicker1'>
+                                <input type='hidden'/>
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                            Dashboard <a @click="goToday()">ir a Hoy</a> <br>
                             <a @click="createService()" role="button" class="btn btn-primary">Crear servicio</a>
                         </div>
                     </div>
@@ -73,8 +80,9 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr v-for="item in services" v-bind:class="{'danger': false == item.enabled, 'success': item.paying !== null}">
-                                    <th scope="row"><a v-if="item.enabled"  @click="edit(item)">{! item.id !}</a></th>
+                                <tr v-for="item in services"
+                                    v-bind:class="{'danger': false == item.enabled, 'success': item.paying !== null}">
+                                    <th scope="row"><a v-if="item.enabled" @click="edit(item)">{! item.id !}</a></th>
                                     <td>{! routeName(item.route_id) !}</td>
                                     <td>{! agencyName(item.agency_id) !}</td>
                                     <td>{! item.turn !}</td>
@@ -83,7 +91,9 @@
                                     <td>{! chauffeurName(item.chauffeur_id) !}</td>
                                     <td>{! item.courier !}</td>
                                     <td v-bind:class="{'warning': item.passengers < 1 }">{! item.passengers !}</td>
-                                    <td v-bind:class="{'warning': item.type_trip_id == null }">{! typeTripName(item.type_trip_id) !}</td>
+                                    <td v-bind:class="{'warning': item.type_trip_id == null }">{!
+                                        typeTripName(item.type_trip_id) !}
+                                    </td>
                                     <td>
                                         <a v-if="item.enabled && item.paying == null" @click="edit(item)">
                                             <span class="glyphicon glyphicon-edit"></span>
@@ -107,5 +117,12 @@
 @section('javascripts')
     <script type="application/javascript">
         app.__vue__.init();
+        $(function () {
+            $('#datetimepicker1').datetimepicker();
+
+            $("#datetimepicker1").on("dp.change", function (e) {
+                app.__vue__.goTo(e.date);
+            });
+        });
     </script>
 @endsection

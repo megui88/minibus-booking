@@ -59,4 +59,15 @@ class ChauffeurController extends Controller
         $chauffeur->update($data);
         return new JsonResponse($chauffeur, JsonResponse::HTTP_OK);
     }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function delete(Chauffeur $chauffeur)
+    {
+        Chauffeur::destroy($chauffeur->id);
+        return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
+    }
 }

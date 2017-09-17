@@ -59,4 +59,15 @@ class TypeTripController extends Controller
         $typeTrip->update($data);
         return new JsonResponse($typeTrip, JsonResponse::HTTP_OK);
     }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function delete(TypeTrip $typeTrip)
+    {
+        TypeTrip::destroy($typeTrip->id);
+        return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
+    }
 }

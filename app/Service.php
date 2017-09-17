@@ -32,7 +32,7 @@ class Service extends Model
         parent::boot();
        self::updating(function ($entity) {
             $complete = false;
-            foreach (['turn','route_id','agency_id', 'passengers', 'type_trip_id'] as $column){
+            foreach (['route_id','agency_id', 'passengers', 'type_trip_id'] as $column){
                 if(empty($entity->$column)){
                     break;
                 }

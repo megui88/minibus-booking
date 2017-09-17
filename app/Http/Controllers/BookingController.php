@@ -40,16 +40,19 @@ class BookingController extends Controller
             }
             $services->where($column, '=', $value);
         }
-
-        $filters = $request->get('filterOr', []);
-        foreach ($filters as $column => $value) {
-            $value = ('false' == $value) ? false
-                : ('true' == $value) ? true : $value;
-            if ($value == 'null') {
-                $services->orWhereNull($column);
-                continue;
-            }
-            $services->whereOr($column, '=', $value);
+        $filtersOr = $request->get('filterOr', []);
+        if (!empty($filtersOr)) {
+            $services->where(function ($q) use ($filtersOr) {
+                foreach ($filtersOr as $column => $value) {
+                    $value = ('false' == $value) ? false
+                        : ('true' == $value) ? true : $value;
+                    if ($value == 'null') {
+                        $q->orWhereNull($column);
+                        continue;
+                    }
+                    $q->whereOr($column, '=', $value);
+                }
+            });
         }
 
         return new JsonResponse($services->get(), JsonResponse::HTTP_OK);

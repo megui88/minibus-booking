@@ -212,7 +212,7 @@ const app = new Vue({
                 });
         },
         getIncompletes: () => {
-            axios.get('/bookings?filterOr[type_trip_id]=null&filterOr[passengers]=null')
+            axios.get('/bookings?filter[enabled]=1&filterOr[type_trip_id]=null&filterOr[passengers]=null')
                 .then((res) => {
                     app.incompletes = res.data;
                 });
@@ -223,10 +223,13 @@ const app = new Vue({
         addToServices: (service) => {
             app.services.push(service);
             app.saveInStorage(app.getUri(app.day), app.services);
+            app.getIncompletes();
         },
         updateService: (index, service) => {
             app.services[index] = service;
             app.saveInStorage(app.getUri(app.day), app.services);
+            app.getIncompletes();
+
         },
         loadEntities: () => {
 
@@ -289,7 +292,21 @@ const app = new Vue({
                 let index = app.liquidations.findIndex((e) => {
                     return e.id == liquidation.id;
                 });
-                app.removeSetting('liquidations', index);
+                app._removeSetting('liquidations', index);
+            });
+        },
+        removeSetting: (setting, entity) => {
+
+            let disableConfirm = confirm("Este registro es inreproducible, y lo va a borrar \n\r esta seguro que desea borrar a: " + entity.name + "?");
+            if (false == disableConfirm) {
+                return;
+            }
+
+            axios.delete(setting + '/' + entity.id).then(() => {
+                let index = app[setting].findIndex((e) => {
+                    return e.id == entity.id;
+                });
+                app._removeSetting(setting, index);
             });
         },
         formRule: (object) => {
@@ -381,12 +398,16 @@ const app = new Vue({
             app[entity][index] = object;
             app.saveInStorage(entity, app[entity]);
         },
-        removeSetting: (entity, index) => {
-            app[entity].splice(index,1);
+        _removeSetting: (entity, index) => {
+            app[entity].splice(index, 1);
             app.saveInStorage(entity, app[entity]);
         },
         goToday: () => {
             app.day = moment();
+            app.init();
+        },
+        goTo: (momentDate) => {
+            app.day = momentDate;
             app.init();
         },
         nextDay: () => {

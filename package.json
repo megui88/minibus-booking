@@ -19,6 +19,7 @@
     "vue": "^2.1.10"
   },
   "dependencies": {
+    "eonasdan-bootstrap-datetimepicker": "^4.17.47",
     "moment": "^2.18.1"
   }
 }

@@ -48,6 +48,7 @@ if (token) {
 }
 
 window.Promise = require('bluebird');
+require('eonasdan-bootstrap-datetimepicker');
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening

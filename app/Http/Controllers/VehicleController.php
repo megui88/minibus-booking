@@ -59,4 +59,15 @@ class VehicleController extends Controller
         $vehicle->update($data);
         return new JsonResponse($vehicle, JsonResponse::HTTP_OK);
     }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function delete(Vehicle $vehicle)
+    {
+        Vehicle::destroy($vehicle->id);
+        return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
+    }
 }

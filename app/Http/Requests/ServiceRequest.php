@@ -24,7 +24,6 @@ class ServiceRequest extends FormRequest
     public function rules()
     {
         return [
-            'turn' => 'required',
             'route_id' => 'required',
             'date' => 'required|date',
             'agency_id' => 'required',

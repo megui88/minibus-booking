@@ -59,4 +59,15 @@ class RuleController extends Controller
         $rule->update($data);
         return new JsonResponse($rule, JsonResponse::HTTP_OK);
     }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function delete(Rule $rule)
+    {
+        Rule::destroy($rule->id);
+        return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
+    }
 }

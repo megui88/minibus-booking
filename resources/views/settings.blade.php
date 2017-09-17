@@ -28,7 +28,10 @@
                                             <th>{! chauffeur.id !}</th>
                                             <td>{! chauffeur.name !}</td>
                                             <td><a @click="formSetting('chauffeurs', chauffeur)" class="btn"><span
-                                                            class="glyphicon glyphicon-pencil"></span></a></td>
+                                                            class="glyphicon glyphicon-pencil"></span></a>
+                                                <a @click="removeSetting('chauffeurs', chauffeur)" class="btn"><span
+                                                            class="glyphicon glyphicon-remove"></span></a>
+                                            </td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -49,7 +52,10 @@
                                             <th>{! agency.id !}</th>
                                             <td>{! agency.name !}</td>
                                             <td><a @click="formSetting('agencies', agency)" class="btn"><span
-                                                            class="glyphicon glyphicon-pencil"></span></a></td>
+                                                            class="glyphicon glyphicon-pencil"></span></a>
+                                                <a @click="removeSetting('agencies', agency)" class="btn"><span
+                                                            class="glyphicon glyphicon-remove"></span></a>
+                                            </td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -74,7 +80,10 @@
                                                 <td>{! vehicle.name !}</td>
                                                 <td>{! chauffeurName(vehicle.chauffeur_id) !}</td>
                                                 <td><a @click="formSetting('vehicles', vehicle)" class="btn"><span
-                                                                class="glyphicon glyphicon-pencil"></span></a></td>
+                                                                class="glyphicon glyphicon-pencil"></span></a>
+                                                    <a @click="removeSetting('vehicles', vehicle)" class="btn"><span
+                                                                class="glyphicon glyphicon-remove"></span></a>
+                                                </td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -95,8 +104,12 @@
                                             <tr v-for="type in types_trips">
                                                 <th>{! type.id !}</th>
                                                 <td>{! type.name !}</td>
-                                                <td><a @click="formSetting('types_trips', type)" class="btn"><span
-                                                                class="glyphicon glyphicon-pencil"></span></a></td>
+                                                <td>
+                                                    <a @click="formSetting('types_trips', type)" class="btn"><span
+                                                                class="glyphicon glyphicon-pencil"></span></a>
+                                                    <a @click="removeSetting('types_trips', type)" class="btn"><span
+                                                                class="glyphicon glyphicon-remove"></span></a>
+                                                </td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -115,8 +128,12 @@
                                             <tr v-for="route in routes">
                                                 <th>{! route.id !}</th>
                                                 <td>{! route.name !}</td>
-                                                <td><a @click="formSetting('routes', route)" class="btn"><span
-                                                                class="glyphicon glyphicon-pencil"></span></a></td>
+                                                <td>
+                                                    <a @click="formSetting('routes', route)" class="btn"><span
+                                                                class="glyphicon glyphicon-pencil"></span></a>
+                                                    <a @click="removeSetting('routes', route)" class="btn"><span
+                                                                class="glyphicon glyphicon-remove"></span></a>
+                                                </td>
                                             </tr>
                                             </tbody>
                                         </table>
