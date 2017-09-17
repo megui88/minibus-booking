@@ -19,12 +19,12 @@
                                         <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Nombre</th>
+                                            <th><input type="text" placeholder="Nombre" v-model="filterChaufferus"> </th>
                                             <th><a @click="formSetting('chauffeurs')">Agregar</a></th>
                                         </tr>
                                         </thead>
                                         <tbody class="text-left">
-                                        <tr v-for="chauffeur in chauffeurs">
+                                        <tr v-for="chauffeur in chauffeursFilter">
                                             <th>{! chauffeur.id !}</th>
                                             <td>{! chauffeur.name !}</td>
                                             <td><a @click="formSetting('chauffeurs', chauffeur)" class="btn"><span
@@ -43,12 +43,12 @@
                                         <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Nombre</th>
+                                            <th><input type="text" placeholder="Nombre" v-model="filterAgencies"> </th>
                                             <th><a @click="formSetting('agencies')">Agregar</a></th>
                                         </tr>
                                         </thead>
                                         <tbody class="text-left">
-                                        <tr v-for="agency in agencies">
+                                        <tr v-for="agency in agenciesFilter">
                                             <th>{! agency.id !}</th>
                                             <td>{! agency.name !}</td>
                                             <td><a @click="formSetting('agencies', agency)" class="btn"><span
@@ -69,13 +69,13 @@
                                             <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Nombre</th>
+                                                <th><input type="text" placeholder="Nombre" v-model="filterVehicles"> </th>
                                                 <th>Asignado a</th>
                                                 <th><a @click="formSetting('vehicles')">Agregar</a></th>
                                             </tr>
                                             </thead>
                                             <tbody class="text-left">
-                                            <tr v-for="vehicle in vehicles">
+                                            <tr v-for="vehicle in vehiclesFilter">
                                                 <th>{! vehicle.id !}</th>
                                                 <td>{! vehicle.name !}</td>
                                                 <td>{! chauffeurName(vehicle.chauffeur_id) !}</td>
@@ -96,12 +96,12 @@
                                             <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Nombre</th>
+                                                <th><input type="text" placeholder="Nombre" v-model="filterTypesTrips"> </th>
                                                 <th><a @click="formSetting('types_trips')">Agregar</a></th>
                                             </tr>
                                             </thead>
                                             <tbody class="text-left">
-                                            <tr v-for="type in types_trips">
+                                            <tr v-for="type in types_tripsFilter">
                                                 <th>{! type.id !}</th>
                                                 <td>{! type.name !}</td>
                                                 <td>
@@ -120,12 +120,12 @@
                                             <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Nombre</th>
+                                                <th><input type="text" placeholder="Nombre" v-model="filterRoutes"> </th>
                                                 <th><a @click="formSetting('routes')">Agregar</a></th>
                                             </tr>
                                             </thead>
                                             <tbody class="text-left">
-                                            <tr v-for="route in routes">
+                                            <tr v-for="route in routesFilter">
                                                 <th>{! route.id !}</th>
                                                 <td>{! route.name !}</td>
                                                 <td>

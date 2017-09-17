@@ -71,15 +71,74 @@ const app = new Vue({
             }
         },
         rules: [],
+        rulesFilter: [],
+        filterAgencies: '',
         agencies: [],
+        agenciesFilter: [],
+        filterVehicles: '',
         vehicles: [],
+        vehiclesFilter: [],
+        filterChaufferus: '',
         chauffeurs: [],
+        chauffeursFilter: [],
+        filterRoutes: '',
         routes: [],
+        routesFilter: [],
+        filterTypesTrips: '',
         types_trips: [],
+        types_tripsFilter: [],
         incompletes: [],
         liquidations: [],
     },
     watch: {
+        rules: (value) => {
+            app.rulesFilter = value;
+        },
+        agencies: (value) => {
+            app.agenciesFilter = value;
+        },
+        vehicles: (value) => {
+            app.vehiclesFilter = value;
+        },
+        chauffeurs: (value) => {
+            app.chauffeursFilter = value;
+        },
+        routes: (value) => {
+            app.routesFilter = value;
+        },
+        types_trips: (value) => {
+            app.types_tripsFilter = value;
+        },
+        filterChaufferus: (value) => {
+            var re = new RegExp(value.toLowerCase());
+            app.chauffeursFilter = app.chauffeurs.filter(function(e){
+                return e.name.toLowerCase().match(re);
+            });
+        },
+        filterAgencies: (value) => {
+            var re = new RegExp(value.toLowerCase());
+            app.agenciesFilter = app.agencies.filter(function(e){
+                return e.name.toLowerCase().match(re);
+            });
+        },
+        filterVehicles: (value) => {
+            var re = new RegExp(value.toLowerCase());
+            app.vehiclesFilter = app.vehicles.filter(function(e){
+                return e.name.toLowerCase().match(re);
+            });
+        },
+        filterRoutes: (value) => {
+            var re = new RegExp(value.toLowerCase());
+            app.routesFilter = app.routes.filter(function(e){
+                return e.name.toLowerCase().match(re);
+            });
+        },
+        filterTypesTrips: (value) => {
+            var re = new RegExp(value.toLowerCase());
+            app.types_tripsFilter = app.types_trips.filter(function(e){
+                return e.name.toLowerCase().match(re);
+            });
+        },
         cache: (value) => {
             app.saveInStorage("cacheIsEnabled", value);
         },
