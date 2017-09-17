@@ -58,6 +58,15 @@
                             </select>
                         </div>
                     </div>
+
+                    <div class="form-group form-group-sm" id="container_tax"
+                         v-bind:class="{'has-error': model.service.tax == null}">
+                        <label class="col-sm-6 control-label" for="tax">Peaje</label>
+                        <div class="col-sm-6">
+                            <input type="number" class="form-control" id="tax"
+                                   v-model="model.service.tax"/>
+                        </div>
+                    </div>
                     <div class="form-group form-group-sm" id="container_type_trip_id"
                          v-bind:class="{'has-error': model.service.type_trip_id == null && model.service.id !== null}">
                         <label class="col-sm-6 control-label" for="type_trip">Tipo de viaje</label>

@@ -11,6 +11,7 @@ Route::get('/settings', 'HomeController@settings')->name('settings');
 Route::get('/prices', 'HomeController@rules')->name('prices');
 Route::get('/incompletes', 'HomeController@incompletes')->name('incompletes');
 Route::get('/liquidated', 'HomeController@liquidated')->name('liquidated');
+Route::get('/download/liquidated/csv/{liquidation}', 'HomeController@downloadCSVLiquidated')->name('download_csv_liquidated');
 Route::get('/download/liquidated/{liquidation}', 'HomeController@downloadLiquidated')->name('download_liquidated');
 
 //Booking

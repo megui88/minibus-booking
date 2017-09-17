@@ -44,6 +44,7 @@ const app = new Vue({
                 chauffeur_id: null,
                 courier: null,
                 passengers: null,
+                tax: null,
                 hour: null,
                 paying: null,
                 enabled: true,
@@ -165,6 +166,7 @@ const app = new Vue({
                 chauffeur_id: null,
                 courier: null,
                 passengers: null,
+                tax: null,
                 hour: '00:00',
                 paying: null,
                 enabled: true,
@@ -271,7 +273,7 @@ const app = new Vue({
                 });
         },
         getIncompletes: () => {
-            axios.get('/bookings?filter[enabled]=1&filterOr[type_trip_id]=null&filterOr[passengers]=null')
+            axios.get('/bookings?filter[enabled]=1&filterOr[type_trip_id]=null&filterOr[passengers]=null&filterOr[tax]=null')
                 .then((res) => {
                     app.incompletes = res.data;
                 });

@@ -76,6 +76,7 @@
                                     <th>Guía</th>
                                     <th>Pasajeros</th>
                                     <th>Tipo de viaje</th>
+                                    <th>Peaje</th>
                                     <th>Acciones</th>
                                 </tr>
                                 </thead>
@@ -94,6 +95,7 @@
                                     <td v-bind:class="{'warning': item.type_trip_id == null }">{!
                                         typeTripName(item.type_trip_id) !}
                                     </td>
+                                    <td v-bind:class="{'warning': item.tax == null }">{! item.tax !}</td>
                                     <td>
                                         <a v-if="item.enabled && item.paying == null" @click="edit(item)">
                                             <span class="glyphicon glyphicon-edit"></span>

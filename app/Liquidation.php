@@ -17,6 +17,7 @@ class Liquidation extends Model
         'date_end',
         'agency_id',
         'services',
+        'tax',
         'total',
     ];
 

@@ -48,6 +48,7 @@ class LiquidationRequest extends FormRequest
                 ])
                 ->where(function($q) {
                     $q->whereNull('type_trip_id')
+                        ->orWhereNull('tax')
                         ->orWhereNull('passengers');
                 });
 

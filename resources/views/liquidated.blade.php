@@ -37,6 +37,10 @@
                                                     class="glyphicon glyphicon-remove"></span></a>
 
                                         <span>&nbsp;&nbsp;</span>
+                                        <a v-bind:href="'/download/liquidated/csv/'+liquidation.id" class="btn"><span
+                                                    class="glyphicon glyphicon-download-alt"></span></a>
+
+                                        <span>&nbsp;&nbsp;</span>
                                         <a v-bind:href="'/download/liquidated/'+liquidation.id" class="btn"><span
                                                     class="glyphicon glyphicon-download"></span></a></td>
                                 </tr>

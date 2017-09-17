@@ -23,6 +23,7 @@ class Service extends Model
         'passengers',
         'type_trip_id',
         'paying',
+        'tax',
         'enabled'
     ];
 
@@ -30,15 +31,16 @@ class Service extends Model
     protected static function boot()
     {
         parent::boot();
-       self::updating(function ($entity) {
-            $complete = false;
-            foreach (['route_id','agency_id', 'passengers', 'type_trip_id'] as $column){
-                if(empty($entity->$column)){
+        self::updating(function ($entity) {
+            $complete = true;
+            foreach (['tax', 'route_id', 'agency_id', 'passengers', 'type_trip_id'] as $column) {
+                if (empty($entity->$column)) {
+                    $complete = !empty($entity->$column);
                     break;
                 }
-                $complete = true;
             }
-            if($complete){
+
+            if ($complete) {
                 $rule = Rule::searchRule($entity);
                 $entity->paying = $rule->price;
             }

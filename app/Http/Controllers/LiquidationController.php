@@ -2,17 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Agency;
+use App\Chauffeur;
 use App\Http\Requests\BaseSettingRequest;
 use App\Http\Requests\LiquidationRequest;
 use App\Liquidation;
 use App\Route;
 use App\Service;
+use App\TypeTrip;
+use App\Vehicle;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class LiquidationController extends Controller
 {
+    private $routes;
+    private $chauffeurs;
+    private $vehicles;
+    private $typeTrip;
+    private $agencies;
+
     /**
      * Create a new controller instance.
      *
@@ -54,11 +64,26 @@ class LiquidationController extends Controller
             ])
             ->get();
         $data['total'] = 0;
+        $data['tax'] = 0;
         $data['services'] = [];
 
         foreach ($services as $service) {
             $data['total'] += $service->paying;
-            $data['services'] [] = $service->toArray();
+            $data['tax'] += $service->tax;
+            $data['services'] [] = [
+                'date' => $service->date,
+                'route' => $this->getRoute($service->route_id),
+                'courier' => $service->courier,
+                'chauffeur' => $this->getChauffeur($service->chauffeur_id),
+                'vehicle' => $this->getVehicle($service->vehicle_id),
+                'tax' => $service->tax,
+                'paying' => $service->paying,
+                'passengers' => $service->passengers,
+                'typeTrip' => $this->getTypeTrip($service->type_trip_id),
+                'agency' => $this->getAgency($service->agency_id),
+                'turn' => $service->turn,
+                'hour' => $service->hour,
+            ];
         }
 
         $object = Liquidation::create($data);
@@ -74,5 +99,61 @@ class LiquidationController extends Controller
     {
         Liquidation::destroy($liquidation->id);
         return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
+    }
+
+
+    private function getRoute($id)
+    {
+        if(is_null($id)){
+            return '';
+        }
+        if (!empty($this->routes[$id])) {
+            return $this->routes[$id];
+        }
+        return $this->routes[$id] = Route::find($id)->name;
+    }
+
+    private function getAgency($id)
+    {
+        if(is_null($id)){
+            return '';
+        }
+        if (!empty($this->agencies[$id])) {
+            return $this->agencies[$id];
+        }
+        return $this->agencies[$id] = Agency::find($id)->name;
+    }
+
+    private function getTypeTrip($id)
+    {
+        if(is_null($id)){
+            return '';
+        }
+        if (!empty($this->typeTrip[$id])) {
+            return $this->typeTrip[$id];
+        }
+        return $this->typeTrip[$id] = TypeTrip::find($id)->name;
+    }
+
+    private function getVehicle($id)
+    {
+        if(is_null($id)){
+            return '';
+        }
+        if (!empty($this->vehicles[$id])) {
+            return $this->vehicles[$id];
+        }
+        return $this->vehicles[$id] = Vehicle::find($id)->name;
+    }
+
+    private function getChauffeur($id)
+    {
+        if(is_null($id)){
+            return '';
+        }
+        if (!empty($this->chauffeurs[$id])) {
+            return $this->chauffeurs[$id];
+        }
+        return $this->chauffeurs[$id] = Chauffeur::find($id)->name;
     }
 }
